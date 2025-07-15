@@ -2,6 +2,8 @@
 import express, { Request, Response } from 'express';
 import { processPayment } from './services/router';
 import { PaymentData } from './services/interfaces';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 app.use(express.json()); // Permite que o servidor entenda JSON
@@ -19,7 +21,7 @@ app.post('/pagar', async (req: Request, res: Response): Promise<void> => {
     }
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`🚀 Payment Gateway (TypeScript) rodando na porta ${PORT}`);
 }); 

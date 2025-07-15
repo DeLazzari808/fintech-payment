@@ -1,8 +1,12 @@
 // processor-a/src/index.ts
 import express, { Request, Response } from 'express';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 app.use(express.json());
+
+const PORT = process.env.PORT || 3001;
 
 app.post('/pagar', (req: Request, res: Response): void => {
     console.log('Processador A (barato) recebeu um pagamento!');
@@ -23,6 +27,6 @@ app.post('/pagar', (req: Request, res: Response): void => {
     });
 });
 
-app.listen(3001, () => {
-    console.log('Processador A (barato e instável) rodando na porta 3001');
+app.listen(PORT, () => {
+    console.log(`Processador A (barato e instável) rodando na porta ${PORT}`);
 }); 

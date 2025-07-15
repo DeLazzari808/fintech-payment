@@ -2,6 +2,11 @@
 import axios from 'axios';
 import Opossum from 'opossum';
 import { PaymentData, ProcessorResponse } from './interfaces';
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+const urlA = process.env.PROCESSOR_A_URL!;
+const urlB = process.env.PROCESSOR_B_URL!;
 
 // Opções para o nosso "guarda de trânsito inteligente"
 const options: Opossum.Options = {
@@ -13,15 +18,13 @@ const options: Opossum.Options = {
 // --- ADAPTER PARA O PROCESSADOR A (BARATO) ---
 const callProcessorA = async (paymentData: PaymentData): Promise<ProcessorResponse> => {
     // A URL do nosso processador falso
-    const url = 'http://localhost:3001/pagar';
-    const { data } = await axios.post<ProcessorResponse>(url, paymentData);
+    const { data } = await axios.post<ProcessorResponse>(urlA, paymentData);
     return data;
 };
 
 // --- ADAPTER PARA O PROCESSADOR B (CARO) ---
 const callProcessorB = async (paymentData: PaymentData): Promise<ProcessorResponse> => {
-    const url = 'http://localhost:3002/pagar';
-    const { data } = await axios.post<ProcessorResponse>(url, paymentData);
+    const { data } = await axios.post<ProcessorResponse>(urlB, paymentData);
     return data;
 };
 

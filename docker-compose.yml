@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  payment-gateway:
+    build: ./payment-gateway
+    env_file:
+      - ./payment-gateway/.env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - processor-a
+      - processor-b
+  processor-a:
+    build: ./processor-a
+    env_file:
+      - ./processor-a/.env
+    ports:
+      - "3001:3001"
+  processor-b:
+    build: ./processor-b
+    env_file:
+      - ./processor-b/.env
+    ports:
+      - "3002:3002" 
