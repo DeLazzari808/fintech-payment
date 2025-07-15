@@ -8,19 +8,28 @@ const urlA = process.env.PROCESSOR_A_URL!;
 const urlB = process.env.PROCESSOR_B_URL!;
 
 const options: Opossum.Options = {
-    timeout: 3000,
+    timeout: 5000, // 5 segundos para evitar timeout falso
     errorThresholdPercentage: 50,
     resetTimeout: 15000
 };
 
 const callProcessorA = async (paymentData: PaymentData): Promise<ProcessorResponse> => {
-    const { data } = await axios.post<ProcessorResponse>(urlA, paymentData);
-    return data;
+    try {
+        const { data } = await axios.post<ProcessorResponse>(urlA, paymentData, { timeout: 4000 });
+        return data;
+    } catch (err: any) {
+        // Garante que qualquer erro seja propagado corretamente para o breaker
+        throw err;
+    }
 };
 
 const callProcessorB = async (paymentData: PaymentData): Promise<ProcessorResponse> => {
-    const { data } = await axios.post<ProcessorResponse>(urlB, paymentData);
-    return data;
+    try {
+        const { data } = await axios.post<ProcessorResponse>(urlB, paymentData, { timeout: 4000 });
+        return data;
+    } catch (err: any) {
+        throw err;
+    }
 };
 
 const breakerA: Opossum<[PaymentData], ProcessorResponse> = new Opossum(callProcessorA, options);

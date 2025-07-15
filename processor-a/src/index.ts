@@ -7,9 +7,19 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
 
+// Altere o modo para 'random', 'success' ou 'fail' para facilitar prints
+const mode: 'random' | 'success' | 'fail' = 'random';
+
 app.post('/pagar', (req: Request, res: Response): void => {
     console.log('Processador A (barato) recebeu um pagamento!');
-    const shouldFail = Math.random() < 0.5;
+    let shouldFail: boolean;
+    if (mode === 'random') {
+        shouldFail = Math.random() < 0.5;
+    } else if (mode === 'success') {
+        shouldFail = false;
+    } else {
+        shouldFail = true;
+    }
     if (shouldFail) {
         console.log('--> FALHA SIMULADA! Ocorreu um erro no Processador A.');
         res.status(500).json({ message: 'Erro interno no processador A' });
